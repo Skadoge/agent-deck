@@ -5706,6 +5706,12 @@ func (s *Session) hasBusyIndicatorResolved(content string) bool {
 	}
 	isClaude := strings.EqualFold(tool, "claude")
 
+	// OpenCode's idle logo and question UI contain pulse glyphs. Busy patterns
+	// above remain authoritative, but a visible prompt makes these decorative.
+	if found && strings.EqualFold(tool, "opencode") && s.hasPromptIndicator(content) {
+		found = false
+	}
+
 	if found {
 		// For Claude, braille spinner frames are authoritative.
 		// Asterisk-style frames can appear in non-active contexts, so require context.
